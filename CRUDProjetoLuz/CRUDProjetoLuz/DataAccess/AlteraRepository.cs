@@ -9,27 +9,16 @@ using System.Data.SqlClient;
 
 namespace CRUDProjetoLuz.DataAccess
 {
-    public class CadastrarRepository
+    public class AlteraRepository
     {
-        private const string tabelaColumn = "Insert into tbl_cadastro (nome, sobrenome, data_nasc, sexo, estadocivil, data_cad)";
-        private const string valuesColumn = "values (@nome, @sobrenome, @data_nasc, @sexo, @estadocivil, @data_cad)";
-        
         //Estanciar class de conexão e comandos 
         Conexao conexao = new Conexao();
         NpgsqlCommand cmd = new NpgsqlCommand();
         public String msgERRO = "...";
-        public CadastrarRepository(String tabelaColumn, String valuesColumn)  //string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, string data_cad
+        
+        public AlteraRepository(Pessoas pessoas)//string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, string data_cad)
         {
-            //Comandos sql para - select, insert, update, delete2
-            cmd.CommandText = string.Format(tabelaColumn + valuesColumn);
-            /*/ parametros
-            cmd.Parameters.AddWithValue("@nome", nome);
-            cmd.Parameters.AddWithValue("@sobrenome", sobrenome);
-            cmd.Parameters.AddWithValue("@data_nasc", data_nasc);
-            cmd.Parameters.AddWithValue("@sexo", sexo);
-            cmd.Parameters.AddWithValue("@estadocivil", estadocivil);
-            cmd.Parameters.AddWithValue("@data_cad", data_cad);
-            */
+
             try
             {
                 //conectar com BD
@@ -38,6 +27,7 @@ namespace CRUDProjetoLuz.DataAccess
                 cmd.ExecuteNonQuery();
                 //desconectar
                 conexao.Desconectar();
+                
                 //mostrar msg erro ou sucesso
                 this.msgERRO = "Cadastrado com sucesso...!";
             }
@@ -47,33 +37,28 @@ namespace CRUDProjetoLuz.DataAccess
             }            
         }
 
-        public CadastrarRepository(string text1, string text2, string text3, string text4, string text5, DateTime displayDate)
+       /* public AlteraRepository(Pessoas pesoas)//string text1, string text2, string text3, string text4, string text5, DateTime displayDate)
         {
-        }
+        }*/
         /*Definição dos metodos para:
   Abrir a conexão com o PostGreSQL via NpgsqlConnectiong;
   Definir um comando usando uma instrução SQL via NpgsqlCommand;
   Executar o comando usando: ExecuteNonQuery e/ou com um DataAdapter com DataTable;
-*/
-
-        /*
-         //Pega todos os registros
-        public DataTable GetTodosRegistros()
+        */
+        //Pega todos os registros
+        public DataTable PegaTodosRegistros()
         {
-            DataTable dt = new DataTable();
-
             try
             {
-                using (pgsqlConnection = new NpgsqlConnection(connString))
                 {
                     // abre a conexão com o PgSQL e define a instrução SQL
-                    pgsqlConnection.Open();
-                    string cmdSeleciona = "Select * from tbl_cadastro order by id_pessoa";
+                    conexao.Conectar();
+                    string cmdSeleciona= "Select * from tbl_cadastro order by id_pessoa";
 
-                    using (NpgsqlDataAdapter Adpt = new NpgsqlDataAdapter(cmdSeleciona, pgsqlConnection))
-                    {
-                        Adpt.Fill(dt);
-                    }
+                    NpgsqlDataAdapter dados = new NpgsqlDataAdapter(cmdSeleciona)
+                    
+                        dados.Fill(dt);
+                    
                 }
             }
             catch (NpgsqlException ex)
@@ -86,10 +71,11 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                pgsqlConnection.Close();
+                conexao.Desconectar();
             }
             return dt;
         }
+        /*
         //Pega um registro pelo codigo
         public DataTable GetRegistroPorId(int id)
         {
