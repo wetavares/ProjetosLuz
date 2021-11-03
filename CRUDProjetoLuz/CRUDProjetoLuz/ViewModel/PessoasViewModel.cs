@@ -34,6 +34,7 @@ namespace CRUDProjetoLuz.ViewModel
         {
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });
+            EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
             ListaPessoas = new ObservableCollection<Pessoas>();
             ListaPessoas.Add(new Pessoas()
@@ -48,19 +49,15 @@ namespace CRUDProjetoLuz.ViewModel
             });
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
-
+        //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
+        //Implementando o comando Deletar
         private void Deletar()
         {
             ListaPessoas.Remove(PessoasSelecionado);
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
 
         }
-
-        //Implementando os comandos - Delete / Novo / Editar - mudar para RelayCammand
-
-
         //Implementando comando Novo
-
         private void Novo()
         {
             Pessoas novapessoa = new Pessoas();
@@ -69,13 +66,13 @@ namespace CRUDProjetoLuz.ViewModel
             {
                 maxId = ListaPessoas.Max(f => f.Id);
             }
+
             novapessoa.Id = maxId + 1;
+            NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
+            novoCadastro.DataContext = novapessoa;
+            novoCadastro.ShowDialog();
 
-            NovoCadastroWindow fw = new NovoCadastroWindow();
-            fw.DataContext = novapessoa;
-            fw.ShowDialog();
-
-            if (fw.DialogResult.HasValue && fw.DialogResult.Value)
+            if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 ListaPessoas.Add(novapessoa);
                 PessoasSelecionado = novapessoa;
@@ -85,15 +82,16 @@ namespace CRUDProjetoLuz.ViewModel
         }
 
         //Implementando comando Editar
-        public void Editar(object parameter) 
+        public void Editar()
         {
-            PessoasViewModel viewModel = (PessoasViewModel)parameter;
-            Pessoas cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
-            NovoCadastroWindow fw = new NovoCadastroWindow();
-            fw.DataContext = cloneFuncionario;
-            fw.ShowDialog();
 
-            if (fw.DialogResult.HasValue && fw.DialogResult.Value)
+            PessoasViewModel viewModel = (PessoasViewModel)PessoasSelecionado.Clone();//?? precisa 
+            Pessoas cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
+            NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
+            novoCadastro.DataContext = cloneFuncionario;
+            novoCadastro.ShowDialog();
+
+            if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 viewModel.PessoasSelecionado.Nome = cloneFuncionario.Nome;
                 viewModel.PessoasSelecionado.Sobrenome = cloneFuncionario.Sobrenome;
@@ -102,38 +100,6 @@ namespace CRUDProjetoLuz.ViewModel
                 viewModel.PessoasSelecionado.EstadoCivil = cloneFuncionario.EstadoCivil;
                 viewModel.PessoasSelecionado.DataCadastro = cloneFuncionario.DataCadastro;
             }
-        }
-        
-        /*
-        public EditarCommand Editar { get; private set; } = new EditarCommand();
-
-        public class EditarCommand : BaseCommand
-        {
-            public override bool CanExecute(object parameter)
-            {
-                var viewModel = parameter as PessoasViewModel;
-                return viewModel != null && viewModel.PessoasSelecionado != null;
-            }
-
-            public override void Execute(object parameter)
-            {
-                var viewModel = (PessoasViewModel)parameter;
-                var cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
-                var fw = new NovoCadastroWindow();
-                fw.DataContext = cloneFuncionario;
-                fw.ShowDialog();
-
-                if (fw.DialogResult.HasValue && fw.DialogResult.Value)
-                {
-                    viewModel.PessoasSelecionado.Nome = cloneFuncionario.Nome;
-                    viewModel.PessoasSelecionado.Sobrenome = cloneFuncionario.Sobrenome;
-                    viewModel.PessoasSelecionado.DataNascimento = cloneFuncionario.DataNascimento;
-                    viewModel.PessoasSelecionado.Sexo = cloneFuncionario.Sexo;
-                    viewModel.PessoasSelecionado.EstadoCivil = cloneFuncionario.EstadoCivil;
-                    viewModel.PessoasSelecionado.DataCadastro = cloneFuncionario.DataCadastro;
-                }
-            }
-        }
-        */
+        }            
     }
 }

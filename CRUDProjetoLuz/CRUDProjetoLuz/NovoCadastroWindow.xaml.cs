@@ -24,7 +24,7 @@ namespace CRUDProjetoLuz
             InitializeComponent();
             SexoComboBox.ItemsSource = Enum.GetValues(typeof(Sexo)).Cast<Sexo>();
             EstadoCivilComboBox.ItemsSource = Enum.GetValues(typeof(EstadoCivil)).Cast<EstadoCivil>();
-            DataAccess.CadastrarRepository cad = new(nome.Text, sobrenome.Text, data_nasc.Text, SexoComboBox.Text, EstadoCivilComboBox.Text, data_cad.DisplayDate); //DataAccess.Cadastrar
+            DataAccess.AlteraRepository cad = new(Pessoas); //DataAccess.Cadastrar
             MessageBox.Show("Aqui"); //(cad.msgEX);
         }
         private void OKButton_Click(object sender, RoutedEventArgs e)

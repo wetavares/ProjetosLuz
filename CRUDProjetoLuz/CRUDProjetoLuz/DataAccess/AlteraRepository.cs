@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.ObjectModel;
 
 namespace CRUDProjetoLuz.DataAccess
 {
@@ -15,50 +16,53 @@ namespace CRUDProjetoLuz.DataAccess
         Conexao conexao = new Conexao();
         NpgsqlCommand cmd = new NpgsqlCommand();
         public String msgERRO = "...";
-        
-        public AlteraRepository(Pessoas pessoas)//string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, string data_cad)
-        {
+        public Pessoas Pessoas { get; set; }
+        public ObservableCollection<Pessoas> ListaPessoas { get; private set; }
 
-            try
-            {
-                //conectar com BD
-                cmd.Connection = conexao.Conectar();
-                //executar comandos
-                cmd.ExecuteNonQuery();
-                //desconectar
-                conexao.Desconectar();
-                
-                //mostrar msg erro ou sucesso
-                this.msgERRO = "Cadastrado com sucesso...!";
-            }
-            catch (SqlException ex)
-            {
-                this.msgERRO = "Erro na conexão com o Banco de Dados...!";
-            }            
+        public AlteraRepository() { }
+        public AlteraRepository(Pessoas pessoas)
+        {
+            cmd.Connection = conexao.Conectar();//???? posso chamar direto
+            cmd.Connection.Open();
+            Pessoas = pessoas;
         }
-
-       /* public AlteraRepository(Pessoas pesoas)//string text1, string text2, string text3, string text4, string text5, DateTime displayDate)
-        {
-        }*/
         /*Definição dos metodos para:
   Abrir a conexão com o PostGreSQL via NpgsqlConnectiong;
   Definir um comando usando uma instrução SQL via NpgsqlCommand;
   Executar o comando usando: ExecuteNonQuery e/ou com um DataAdapter com DataTable;
         */
         //Pega todos os registros
-        public DataTable PegaTodosRegistros()
+        public ObservableCollection<Pessoas> PegaTodosRegistros()
         {
             try
             {
                 {
                     // abre a conexão com o PgSQL e define a instrução SQL
-                    conexao.Conectar();
-                    string cmdSeleciona= "Select * from tbl_cadastro order by id_pessoa";
-
-                    NpgsqlDataAdapter dados = new NpgsqlDataAdapter(cmdSeleciona)
+                    cmd.Connection = conexao.Conectar();//??? posso chamar direto?
+                    cmd.Connection.Open();
+                    cmd.CommandText = "Select * from tbl_cadastro order by id_pessoa;";
+                    cmd.ExecuteNonQuery();
+                    NpgsqlDataAdapter dados = new NpgsqlDataAdapter(cmd);
+                    DataTable dtTable = new DataTable();
+                    dados.Fill(dtTable);
                     
-                        dados.Fill(dt);
-                    
+                    if (ListaPessoas == null)
+                    {
+                        ListaPessoas = new ObservableCollection<Pessoas>();
+                    }
+                    foreach (DataRow dataRow in dtTable.Rows)
+                    {
+                        ListaPessoas.Add(new Pessoas()
+                        {//string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, DateTime data_cad
+                            Id = (int)dataRow[0],
+                            Nome = dataRow["nome"].ToString(),
+                            Sobrenome = dataRow["sobrenome"].ToString(),
+                            DataNascimento = DateTime.Parse(dataRow["data_nasc"].ToString()),
+                            Sexo = (Sexo)Enum.Parse(typeof(Sexo),dataRow["sexo"].ToString()),
+                            EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil),dataRow["estadocivil"].ToString()),
+                            DataCadastro = DateTime.Parse(dataRow["data_cad"].ToString())
+                        })
+                    }
                 }
             }
             catch (NpgsqlException ex)
@@ -71,9 +75,9 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                conexao.Desconectar();
+                conexao.Desconectar();                        
             }
-            return dt;
+            return ListaPessoas;
         }
         /*
         //Pega um registro pelo codigo
