@@ -85,13 +85,13 @@ namespace CRUDProjetoLuz.ViewModel
         public void Editar()
         {
 
-            PessoasViewModel viewModel = (PessoasViewModel)PessoasSelecionado.Clone();//?? precisa 
-            Pessoas cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
+           // PessoasViewModel viewModel = (PessoasViewModel)PessoasSelecionado.Clone();//?? precisa 
+           // Pessoas cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
-            novoCadastro.DataContext = cloneFuncionario;
+            novoCadastro.DataContext = PessoasSelecionado;//cloneFuncionario;
             novoCadastro.ShowDialog();
 
-            if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
+            /*if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 viewModel.PessoasSelecionado.Nome = cloneFuncionario.Nome;
                 viewModel.PessoasSelecionado.Sobrenome = cloneFuncionario.Sobrenome;
@@ -99,7 +99,7 @@ namespace CRUDProjetoLuz.ViewModel
                 viewModel.PessoasSelecionado.Sexo = cloneFuncionario.Sexo;
                 viewModel.PessoasSelecionado.EstadoCivil = cloneFuncionario.EstadoCivil;
                 viewModel.PessoasSelecionado.DataCadastro = cloneFuncionario.DataCadastro;
-            }
+            }*/
         }            
     }
 }

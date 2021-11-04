@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace CRUDProjetoLuz.DataAccess
 {
-    public class AlteraRepository
+    public class AcessaRepository
     {
         //Estanciar class de conexão e comandos 
         Conexao conexao = new Conexao();
@@ -19,40 +19,29 @@ namespace CRUDProjetoLuz.DataAccess
         public Pessoas Pessoas { get; set; }
         public ObservableCollection<Pessoas> ListaPessoas { get; private set; }
 
-        public AlteraRepository() { }
-        public AlteraRepository(Pessoas pessoas)
+
+        public AcessaRepository() { }
+        public AcessaRepository(Pessoas pessoas)
         {
-            cmd.Connection = conexao.Conectar();//???? posso chamar direto
-            cmd.Connection.Open();
-            Pessoas = pessoas;
+            cmd.Connection = conexao.Conectar();
         }
-        /*Definição dos metodos para:
-  Abrir a conexão com o PostGreSQL via NpgsqlConnectiong;
-  Definir um comando usando uma instrução SQL via NpgsqlCommand;
-  Executar o comando usando: ExecuteNonQuery e/ou com um DataAdapter com DataTable;
-        */
+        //Definição dos metodos
         //Pega todos os registros
-        public ObservableCollection<Pessoas> PegaTodosRegistros()
+        public void PegaTodosRegistros()
         {
             try
             {
-                {
                     // abre a conexão com o PgSQL e define a instrução SQL
-                    cmd.Connection = conexao.Conectar();//??? posso chamar direto?
+                    //cmd.Connection = conexao.Conectar();//??? posso chamar direto?
                     cmd.Connection.Open();
                     cmd.CommandText = "Select * from tbl_cadastro order by id_pessoa;";
                     cmd.ExecuteNonQuery();
-                    NpgsqlDataAdapter dados = new NpgsqlDataAdapter(cmd);
-                    DataTable dtTable = new DataTable();
-                    dados.Fill(dtTable);
-                    
-                    if (ListaPessoas == null)
+                    NpgsqlDataAdapter dtAdapter = new NpgsqlDataAdapter(cmd);
+                    DataSet dtSet = new DataSet();
+                    dtAdapter.Fill(dtSet,"tbl_cadastro");
+                    foreach (DataRow dataRow in dtSet.Tables[0].Rows)
                     {
-                        ListaPessoas = new ObservableCollection<Pessoas>();
-                    }
-                    foreach (DataRow dataRow in dtTable.Rows)
-                    {
-                        ListaPessoas.Add(new Pessoas()
+                       ListaPessoas.Add(new Pessoas()
                         {//string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, DateTime data_cad
                             Id = (int)dataRow[0],
                             Nome = dataRow["nome"].ToString(),
@@ -63,7 +52,6 @@ namespace CRUDProjetoLuz.DataAccess
                             DataCadastro = DateTime.Parse(dataRow["data_cad"].ToString())
                         })
                     }
-                }
             }
             catch (NpgsqlException ex)
             {
@@ -75,28 +63,33 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                conexao.Desconectar();                        
+                cmd.Connection.Close();                        
             }
-            return ListaPessoas;
         }
-        /*
         //Pega um registro pelo codigo
-        public DataTable GetRegistroPorId(int id)
+        public void pegaRegistroPorId(int id)
         {
-            DataTable dt = new DataTable();
-
             try
             {
-                using (pgsqlConnection = new NpgsqlConnection(connString))
+                // abre a conexão com o PgSQL, define a instrução SQL, pega o dado pelo id
+                cmd.Connection.Open();
+                cmd.CommandText = "Select * from tbl_cadastro Where id = " + id;
+                cmd.ExecuteNonQuery();
+                NpgsqlDataAdapter dtAdapter = new NpgsqlDataAdapter(cmd);
+                DataSet dtSet = new DataSet("tbl_cadastro");
+                dtAdapter.Fill(dtSet,"tbl_cadastro");
+                foreach (DataRow dataRow in dtSet.Tables[0].Rows)
                 {
-                    //Abra a conexão com o PgSQL
-                    pgsqlConnection.Open();
-                    string cmdSeleciona = "Select * from tbl_cadastro Where id = " + id;
-
-                    using (NpgsqlDataAdapter Adpt = new NpgsqlDataAdapter(cmdSeleciona, pgsqlConnection))
-                    {
-                        Adpt.Fill(dt);
-                    }
+                    ListaPessoas.Add(new Pessoas()
+                    {//string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, DateTime data_cad
+                        Id = (int)dataRow[0],
+                        Nome = dataRow["nome"].ToString(),
+                        Sobrenome = dataRow["sobrenome"].ToString(),
+                        DataNascimento = DateTime.Parse(dataRow["data_nasc"].ToString()),
+                        Sexo = (Sexo)Enum.Parse(typeof(Sexo), dataRow["sexo"].ToString()),
+                        EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), dataRow["estadocivil"].ToString()),
+                        DataCadastro = DateTime.Parse(dataRow["data_cad"].ToString())
+                    });
                 }
             }
             catch (NpgsqlException ex)
@@ -109,11 +102,10 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                pgsqlConnection.Close();
+                cmd.Connection.Close();
             }
-            return dt;
         }
-
+        /*
         //Inserir registros
         public void InserirRegistro(string nome, string sobrenome, string data_nasc, string sexo, string estadocivil, DateTime data_cad)
         {
