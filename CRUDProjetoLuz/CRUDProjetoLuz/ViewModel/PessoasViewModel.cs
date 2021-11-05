@@ -26,10 +26,8 @@ namespace CRUDProjetoLuz.ViewModel
             set
             { 
                 SetField(ref _pessoasSelecionado, value);
-               // EditarCommand.CanExecuteChanged(_pessoasSelecionado);
             }
-        }
-       
+        } 
         public PessoasViewModel()
         {
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
@@ -37,7 +35,7 @@ namespace CRUDProjetoLuz.ViewModel
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
             ListaPessoas = new ObservableCollection<Pessoas>();
-            ListaPessoas.Add(new Pessoas()
+            /*ListaPessoas.Add(new Pessoas()
             {
                 Id = 1,
                 Nome = "Wemerson",
@@ -46,7 +44,7 @@ namespace CRUDProjetoLuz.ViewModel
                 Sexo = Sexo.Masculino,
                 EstadoCivil = EstadoCivil.Casado,
                 DataCadastro = new DateTime(2021, 10, 21)       
-            });
+            });*/
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
@@ -55,7 +53,6 @@ namespace CRUDProjetoLuz.ViewModel
         {
             ListaPessoas.Remove(PessoasSelecionado);
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
-
         }
         //Implementando comando Novo
         private void Novo()

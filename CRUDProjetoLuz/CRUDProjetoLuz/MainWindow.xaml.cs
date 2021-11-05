@@ -26,10 +26,5 @@ namespace CRUDProjetoLuz
             InitializeComponent();
             DataContext = new PessoasViewModel();
         }
-        /*
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }*/
     }
 }
