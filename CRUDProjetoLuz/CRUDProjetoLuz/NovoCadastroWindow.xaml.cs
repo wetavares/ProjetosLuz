@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace CRUDProjetoLuz
 {
     /// <summary>
@@ -19,13 +20,14 @@ namespace CRUDProjetoLuz
     /// </summary>
     public partial class NovoCadastroWindow : Window
     {
+        public Pessoas pessoas;
         public NovoCadastroWindow()
         {
             InitializeComponent();
             SexoComboBox.ItemsSource = Enum.GetValues(typeof(Sexo)).Cast<Sexo>();
             EstadoCivilComboBox.ItemsSource = Enum.GetValues(typeof(EstadoCivil)).Cast<EstadoCivil>();
-            DataAccess.DataRepository cad = new(Pessoas); //DataAccess.Cadastrar
-            MessageBox.Show("Aqui"); //(cad.msgEX);
+            DataAccess.DataRepository cad = new(pessoas); //DataAccess.Cadastrar
+           // MessageBox.Show("Aqui"); //(cad.msgEX);
         }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {

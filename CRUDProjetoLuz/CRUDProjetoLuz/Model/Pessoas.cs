@@ -12,10 +12,10 @@ namespace CRUDProjetoLuz
         private int _id;
         private string _nome;
         private string _sobrenome;
-        public DateTime _dataNascimento;
-        public Sexo _sexo;
-        public EstadoCivil _estadoCivil;
-        public DateTime _dataCadastro;
+        private DateTime _dataNascimento;
+        private Sexo _sexo;
+        private EstadoCivil _estadoCivil;
+        private DateTime _dataCadastro;
         public int Id 
         {
             get { return _id; }
