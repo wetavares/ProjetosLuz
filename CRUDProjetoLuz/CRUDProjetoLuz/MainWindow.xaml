@@ -13,8 +13,8 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button Margin="3" CommandParameter="{Binding}" Command="{Binding NovoCommand}" Padding="3" Content="Novo"/>
-            <Button Margin="3" CommandParameter="{Binding}" Command="{Binding Editar}" Padding="3" Content="Editar"/>
-            <Button Margin="3" Padding="3" CommandParameter="{Binding}" Command="{Binding Deletar}" Content="Deletar"/>
+            <Button Margin="3" CommandParameter="{Binding}" Command="{Binding EditarCommand}" Padding="3" Content="Editar"/>
+            <Button Margin="3" Padding="3" CommandParameter="{Binding}" Command="{Binding DeletarCommand}" Content="Deletar"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1"
                       HorizontalScrollBarVisibility="Visible"

@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using CRUDProjetoLuz.DataAccess;
 
 namespace CRUDProjetoLuz
 {
@@ -26,8 +26,9 @@ namespace CRUDProjetoLuz
             InitializeComponent();
             SexoComboBox.ItemsSource = Enum.GetValues(typeof(Sexo)).Cast<Sexo>();
             EstadoCivilComboBox.ItemsSource = Enum.GetValues(typeof(EstadoCivil)).Cast<EstadoCivil>();
-            DataAccess.DataRepository cad = new(pessoas); //DataAccess.Cadastrar
-           // MessageBox.Show("Aqui"); //(cad.msgEX);
+            //DataAccess.Cadastrar
+
+            // MessageBox.Show("Aqui"); //(cad.msgEX);
         }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {

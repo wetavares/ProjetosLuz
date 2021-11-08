@@ -108,19 +108,23 @@ namespace CRUDProjetoLuz.DataAccess
             }
         }
         //Inserir registros
-        public Pessoas InserirRegistro(Pessoas pessoas)  //string nome, string sobrenome, string DataNascimento, string sexo, string estadocivil, DateTime DataCadastro
+        public void InserirRegistro(Pessoas pessoas)  //string nome, string sobrenome, string DataNascimento, string sexo, string estadocivil, DateTime DataCadastro
         {
             try
             {
                 //Abra a conexão com o PgSQL
-                cmd.Connection.Open();
+                if (cmd.Connection.State == System.Data.ConnectionState.Closed)
+                {
+                    cmd.Connection.Open();
+                }
                 //Passar comandos sql
+
                 cmd.CommandText = "Insert Into tbl_cadstro(nome,sobrenome,DataNascimento,sexo,estadocivil,DataCadastro) values(@nome,@sobrenome,@DataNascimento,@sexo,@estacivil,@DataCadastro)";
                 cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
                 cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
                 cmd.Parameters.AddWithValue("@DataNascimento", pessoas.DataNascimento);
-                cmd.Parameters.AddWithValue("@sexo", pessoas.Sexo);
-                cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil);
+                cmd.Parameters.AddWithValue("@sexo", Enum.Parse(typeof(Pessoas), pessoas.Sexo));
+                cmd.Parameters.AddWithValue("@estadocivil", Enum.Parse(typeof(Pessoas), pessoas.EstadoCivil));
                 cmd.Parameters.AddWithValue("@DataCadastro", pessoas.DataCadastro);
                 cmd.ExecuteNonQuery();
             }
@@ -136,7 +140,7 @@ namespace CRUDProjetoLuz.DataAccess
             {
                 cmd.Connection.Close();
             }
-            return Pessoas;//a definir
+            //return Pessoas;
         }
         //Atualiza registros
         public void AtualizarRegistro(Pessoas pessoas)  //int id_pessoa, string nome, string sobrenome, string DataNascimento, string sexo, string estadocivil, DateTime DataCadastro
@@ -150,9 +154,9 @@ namespace CRUDProjetoLuz.DataAccess
                 cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
                 cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
                 cmd.Parameters.AddWithValue("@DataNascimento", pessoas.DataNascimento);
-                cmd.Parameters.AddWithValue("@sexo = ", pessoas.Sobrenome);
+                cmd.Parameters.AddWithValue("@sexo = ", pessoas.Sexo);
                 cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil);
-                cmd.Parameters.AddWithValue("@DataCadastro", pessoas.Sobrenome);
+                cmd.Parameters.AddWithValue("@DataCadastro", pessoas.DataCadastro);
                 cmd.Parameters.AddWithValue("@Where id_pessoa", pessoas.Id);
                 cmd.Parameters.AddWithValue("@id", pessoas.Id);
                 cmd.ExecuteNonQuery();

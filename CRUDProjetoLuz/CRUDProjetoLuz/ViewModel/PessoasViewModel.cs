@@ -35,16 +35,7 @@ namespace CRUDProjetoLuz.ViewModel
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
             ListaPessoas = new ObservableCollection<Pessoas>();
-            /*ListaPessoas.Add(new Pessoas()
-            {
-                Id = 1,
-                Nome = "Wemerson",
-                Sobrenome = "Tavares",
-                DataNascimento = new DateTime(1973, 11, 23),
-                Sexo = Sexo.Masculino,
-                EstadoCivil = EstadoCivil.Casado,
-                DataCadastro = new DateTime(2021, 10, 21)       
-            });*/
+
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
@@ -68,35 +59,23 @@ namespace CRUDProjetoLuz.ViewModel
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
             novoCadastro.DataContext = novapessoa;
             novoCadastro.ShowDialog();
+            DataRepository cad = new DataRepository(novapessoa);
+            
 
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 ListaPessoas.Add(novapessoa);
+
                 PessoasSelecionado = novapessoa;
-
+                cad.InserirRegistro(novapessoa);
             }
-
         }
-
         //Implementando comando Editar
         public void Editar()
         {
-
-           // PessoasViewModel viewModel = (PessoasViewModel)PessoasSelecionado.Clone();//?? precisa 
-           // Pessoas cloneFuncionario = (Pessoas)viewModel.PessoasSelecionado.Clone();
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
             novoCadastro.DataContext = PessoasSelecionado;//cloneFuncionario;
             novoCadastro.ShowDialog();
-
-            /*if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
-            {
-                viewModel.PessoasSelecionado.Nome = cloneFuncionario.Nome;
-                viewModel.PessoasSelecionado.Sobrenome = cloneFuncionario.Sobrenome;
-                viewModel.PessoasSelecionado.DataNascimento = cloneFuncionario.DataNascimento;
-                viewModel.PessoasSelecionado.Sexo = cloneFuncionario.Sexo;
-                viewModel.PessoasSelecionado.EstadoCivil = cloneFuncionario.EstadoCivil;
-                viewModel.PessoasSelecionado.DataCadastro = cloneFuncionario.DataCadastro;
-            }*/
         }            
     }
 }
