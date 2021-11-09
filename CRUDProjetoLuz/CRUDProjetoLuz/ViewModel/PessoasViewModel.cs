@@ -34,8 +34,12 @@ namespace CRUDProjetoLuz.ViewModel
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
+            Pessoas CarregaDadosBD = new Pessoas();
+            Pessoas pessoas = new Pessoas();
+            DataRepository dadosBD = new DataRepository(pessoas);
             ListaPessoas = new ObservableCollection<Pessoas>();
-
+           // ObservableCollection<Pessoas> pessoas = dadosBD.PegaTodosRegistros();
+            ListaPessoas = dadosBD.PegaTodosRegistros();
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
@@ -65,9 +69,8 @@ namespace CRUDProjetoLuz.ViewModel
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 ListaPessoas.Add(novapessoa);
-
-                PessoasSelecionado = novapessoa;
                 cad.InserirRegistro(novapessoa);
+                PessoasSelecionado = novapessoa;
             }
         }
         //Implementando comando Editar

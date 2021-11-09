@@ -28,13 +28,16 @@ namespace CRUDProjetoLuz.DataAccess
         }
         //Definição dos metodos
         //Pega todos os registros
-        public void PegaTodosRegistros()
+        public ObservableCollection<Pessoas> PegaTodosRegistros()
         {
             try
             {
-                // abre a conexão com o PgSQL e define a instrução SQL
-                //cmd.Connection = conexao.Conectar();//??? posso chamar direto?
-                cmd.Connection.Open();
+                //Abra a conexão com o PgSQL
+                if (cmd.Connection.State == ConnectionState.Closed)
+                {
+                    cmd.Connection.Open();
+                }
+                // Define a instrução SQL
                 cmd.CommandText = "Select * from tbl_cadastro order by id_pessoa;";
                 cmd.ExecuteNonQuery();
                 NpgsqlDataAdapter dtAdapter = new NpgsqlDataAdapter(cmd);
@@ -43,14 +46,14 @@ namespace CRUDProjetoLuz.DataAccess
                 foreach (DataRow dataRow in dtSet.Tables[0].Rows)
                 {
                     ListaPessoas.Add(new Pessoas()
-                    {//string nome, string sobrenome, string DataNascimento, string sexo, string estadocivil, DateTime DataCadastro
+                    {
                         Id = (int)dataRow[0],
                         Nome = dataRow["nome"].ToString(),
                         Sobrenome = dataRow["sobrenome"].ToString(),
-                        DataNascimento = DateTime.Parse(dataRow["DataNascimento"].ToString()),
+                        DataNascimento = DateTime.Parse(dataRow["datanascimento"].ToString()),
                         Sexo = (Sexo)Enum.Parse(typeof(Sexo), dataRow["sexo"].ToString()),
                         EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), dataRow["estadocivil"].ToString()),
-                        DataCadastro = DateTime.Parse(dataRow["DataCadastro"].ToString())
+                        DataCadastro = DateTime.Parse(dataRow["datacadastro"].ToString())
                     });
                 }
             }
@@ -66,6 +69,7 @@ namespace CRUDProjetoLuz.DataAccess
             {
                 cmd.Connection.Close();
             }
+            return ListaPessoas;
         }
         //Pega um registro pelo codigo
         public void PegaRegistroPorId(int id)
@@ -87,10 +91,10 @@ namespace CRUDProjetoLuz.DataAccess
                         Id = (int)dataRow[0],
                         Nome = dataRow["nome"].ToString(),
                         Sobrenome = dataRow["sobrenome"].ToString(),
-                        DataNascimento = DateTime.Parse(dataRow["DataNascimento"].ToString()),
+                        DataNascimento = DateTime.Parse(dataRow["datanascimento"].ToString()),
                         Sexo = (Sexo)Enum.Parse(typeof(Sexo), dataRow["sexo"].ToString()),
                         EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), dataRow["estadocivil"].ToString()),
-                        DataCadastro = DateTime.Parse(dataRow["DataCadastro"].ToString())
+                        DataCadastro = DateTime.Parse(dataRow["datacadastro"].ToString())
                     });
                 }
             }
@@ -113,19 +117,22 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //Abra a conexão com o PgSQL
-                if (cmd.Connection.State == System.Data.ConnectionState.Closed)
+                if (cmd.Connection.State == ConnectionState.Closed)
                 {
                     cmd.Connection.Open();
                 }
                 //Passar comandos sql
-
-                cmd.CommandText = "Insert Into tbl_cadstro(nome,sobrenome,DataNascimento,sexo,estadocivil,DataCadastro) values(@nome,@sobrenome,@DataNascimento,@sexo,@estacivil,@DataCadastro)";
+                string _sexo = pessoas.Sexo.ToString();
+                string _estadocivil = pessoas.EstadoCivil.ToString();
+                cmd.CommandText = "Insert Into tbl_cadastro(nome,sobrenome,datanascimento,sexo,estadocivil,datacadastro)" +
+                    " values(@nome,@sobrenome,@datanascimento,@sexo,@estadocivil,@datacadastro)";
                 cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
                 cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
-                cmd.Parameters.AddWithValue("@DataNascimento", pessoas.DataNascimento);
-                cmd.Parameters.AddWithValue("@sexo", Enum.Parse(typeof(Pessoas), pessoas.Sexo));
-                cmd.Parameters.AddWithValue("@estadocivil", Enum.Parse(typeof(Pessoas), pessoas.EstadoCivil));
-                cmd.Parameters.AddWithValue("@DataCadastro", pessoas.DataCadastro);
+                cmd.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
+                cmd.Parameters.AddWithValue("@sexo", _sexo);
+                cmd.Parameters.AddWithValue("@estadocivil", _estadocivil);
+                cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
+                cmd.Prepare();
                 cmd.ExecuteNonQuery();
             }
             catch (NpgsqlException ex)
@@ -150,13 +157,15 @@ namespace CRUDProjetoLuz.DataAccess
                 //Abra a conexão com o PgSQL                  
                 cmd.Connection.Open();
                 //Passa comando sql
-                cmd.CommandText = "Update tbl_cadastro Set nome = @nome, sobrenome = @sobrenome, DataNascimento = @DataNascimento, sexo = @sexo, estadocivil = @estadocivil, DataCadastro = @DataCadastro where id_pessoa = @id;";
+                cmd.CommandText = "Update tbl_cadastro Set nome = @nome, sobrenome = @sobrenome, datanascimento = @datanascimento," +
+                    " sexo = @sexo, estadocivil = @estadocivil, datacadastro = @datacadastro " +
+                    "where id_pessoa = @id;";
                 cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
                 cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
-                cmd.Parameters.AddWithValue("@DataNascimento", pessoas.DataNascimento);
+                cmd.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
                 cmd.Parameters.AddWithValue("@sexo = ", pessoas.Sexo);
                 cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil);
-                cmd.Parameters.AddWithValue("@DataCadastro", pessoas.DataCadastro);
+                cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
                 cmd.Parameters.AddWithValue("@Where id_pessoa", pessoas.Id);
                 cmd.Parameters.AddWithValue("@id", pessoas.Id);
                 cmd.ExecuteNonQuery();
