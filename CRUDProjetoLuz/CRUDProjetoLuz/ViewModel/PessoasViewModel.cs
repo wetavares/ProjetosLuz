@@ -30,16 +30,15 @@ namespace CRUDProjetoLuz.ViewModel
         } 
         public PessoasViewModel()
         {
+            Pessoas novapessoa = new Pessoas();
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
-            NovoCommand = new RelayCommand((object parameter) => { Novo(); });
+            NovoCommand = new RelayCommand((object parameter) => { Novo(novapessoa); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
-            Pessoas CarregaDadosBD = new Pessoas();
-            Pessoas pessoas = new Pessoas();
-            DataRepository dadosBD = new DataRepository(pessoas);
             ListaPessoas = new ObservableCollection<Pessoas>();
-           // ObservableCollection<Pessoas> pessoas = dadosBD.PegaTodosRegistros();
-            ListaPessoas = dadosBD.PegaTodosRegistros();
+            DataRepository dadosBD = new DataRepository(novapessoa);
+
+            dadosBD.PegaTodosRegistros(ListaPessoas);
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
@@ -50,26 +49,25 @@ namespace CRUDProjetoLuz.ViewModel
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Implementando comando Novo
-        private void Novo()
+        private void Novo(Pessoas novapessoa)
         {
-            Pessoas novapessoa = new Pessoas();
+            
             int maxId = 0;
             if (ListaPessoas.Any())
             {
                 maxId = ListaPessoas.Max(f => f.Id);
             }
-
             novapessoa.Id = maxId + 1;
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
             novoCadastro.DataContext = novapessoa;
             novoCadastro.ShowDialog();
-            DataRepository cad = new DataRepository(novapessoa);
+            DataRepository cadastrado = new DataRepository(novapessoa);
             
 
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 ListaPessoas.Add(novapessoa);
-                cad.InserirRegistro(novapessoa);
+                cadastrado.InserirRegistro(novapessoa);
                 PessoasSelecionado = novapessoa;
             }
         }

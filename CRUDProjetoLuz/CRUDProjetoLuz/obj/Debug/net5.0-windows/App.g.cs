@@ -33,7 +33,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace CRUDProjetoLuz{
+namespace CRUDProjetoLuz.CRUDProjetoLuz.ViewModel.CRUDProjetoLuz.ViewModel {
     
     
     /// <summary>
@@ -62,7 +62,7 @@ namespace CRUDProjetoLuz{
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "5.0.11.0")]
         public static void Main() {
-            CRUDProjetoLuz.App app = new CRUDProjetoLuz.App();
+            CRUDProjetoLuz.ViewModel.App app = new CRUDProjetoLuz.ViewModel.App();
             app.InitializeComponent();
             app.Run();
         }

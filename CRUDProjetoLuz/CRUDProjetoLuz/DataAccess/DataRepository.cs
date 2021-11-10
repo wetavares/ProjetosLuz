@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace CRUDProjetoLuz.DataAccess
 {
@@ -18,17 +19,15 @@ namespace CRUDProjetoLuz.DataAccess
         NpgsqlCommand cmd = new NpgsqlCommand();
 
         public Pessoas Pessoas { get; set; }
-        public ObservableCollection<Pessoas> ListaPessoas { get; private set; }
 
-
-        public DataRepository() { }
+       // public DataRepository() { }
         public DataRepository(Pessoas pessoas)
         {
             cmd.Connection = conexao.Conectar();
         }
         //Definição dos metodos
         //Pega todos os registros
-        public ObservableCollection<Pessoas> PegaTodosRegistros()
+        public void PegaTodosRegistros(ObservableCollection<Pessoas> ListaPessoas)
         {
             try
             {
@@ -40,22 +39,23 @@ namespace CRUDProjetoLuz.DataAccess
                 // Define a instrução SQL
                 cmd.CommandText = "Select * from tbl_cadastro order by id_pessoa;";
                 cmd.ExecuteNonQuery();
-                NpgsqlDataAdapter dtAdapter = new NpgsqlDataAdapter(cmd);
-                DataSet dtSet = new DataSet();
-                dtAdapter.Fill(dtSet, "tbl_cadastro");
-                foreach (DataRow dataRow in dtSet.Tables[0].Rows)
+                NpgsqlDataReader lista = cmd.ExecuteReader();
+                if (lista.HasRows)
                 {
-                    ListaPessoas.Add(new Pessoas()
+                    Pessoas p = new Pessoas();
+                    while (lista.Read())
                     {
-                        Id = (int)dataRow[0],
-                        Nome = dataRow["nome"].ToString(),
-                        Sobrenome = dataRow["sobrenome"].ToString(),
-                        DataNascimento = DateTime.Parse(dataRow["datanascimento"].ToString()),
-                        Sexo = (Sexo)Enum.Parse(typeof(Sexo), dataRow["sexo"].ToString()),
-                        EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), dataRow["estadocivil"].ToString()),
-                        DataCadastro = DateTime.Parse(dataRow["datacadastro"].ToString())
-                    });
-                }
+                        p.Id = Convert.ToInt32(lista["id_pessoa"]);
+                        p.Nome = lista["nome"].ToString();
+                        p.Sobrenome = lista["sobrenome"].ToString();
+                        p.DataNascimento = Convert.ToDateTime(lista["datanascimento"]);
+                        p.Sexo = (Sexo)Enum.Parse(typeof(Sexo), lista[name:"sexo"].ToString());
+                        p.EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name:"estadocivil"].ToString());
+                        p.DataCadastro = Convert.ToDateTime(lista["datacadastro"]);
+                        ListaPessoas.Add(p);
+                    }
+                };
+                lista.Close();
             }
             catch (NpgsqlException ex)
             {
@@ -69,10 +69,9 @@ namespace CRUDProjetoLuz.DataAccess
             {
                 cmd.Connection.Close();
             }
-            return ListaPessoas;
         }
         //Pega um registro pelo codigo
-        public void PegaRegistroPorId(int id)
+        public void PegaRegistroPorId(ObservableCollection<Pessoas> ListaPessoas, int id)
         {
             try
             {
@@ -81,22 +80,20 @@ namespace CRUDProjetoLuz.DataAccess
                 cmd.CommandText = $"Select * from tbl_cadastro Where id = @id;";
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.ExecuteNonQuery();
-                NpgsqlDataAdapter dtAdapter = new NpgsqlDataAdapter(cmd);
-                DataSet dtSet = new DataSet("tbl_cadastro");
-                dtAdapter.Fill(dtSet, "tbl_cadastro");
-                foreach (DataRow dataRow in dtSet.Tables[0].Rows)
+                NpgsqlDataReader lista = cmd.ExecuteReader();
+                if(lista.Read())
                 {
-                    ListaPessoas.Add(new Pessoas()
-                    {//string nome, string sobrenome, string DataNascimento, string sexo, string estadocivil, DateTime DataCadastro
-                        Id = (int)dataRow[0],
-                        Nome = dataRow["nome"].ToString(),
-                        Sobrenome = dataRow["sobrenome"].ToString(),
-                        DataNascimento = DateTime.Parse(dataRow["datanascimento"].ToString()),
-                        Sexo = (Sexo)Enum.Parse(typeof(Sexo), dataRow["sexo"].ToString()),
-                        EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), dataRow["estadocivil"].ToString()),
-                        DataCadastro = DateTime.Parse(dataRow["datacadastro"].ToString())
-                    });
-                }
+                    Pessoas p = new Pessoas();
+                    p.Id = Convert.ToInt32(lista["id_pessoa"]);
+                    p.Nome = lista["nome"].ToString();
+                    p.Sobrenome = lista["sobrenome"].ToString();
+                    p.DataNascimento = Convert.ToDateTime(lista["datanascimento"]);
+                    p.Sexo = (Sexo)Enum.Parse(typeof(Sexo), lista[name: "sexo"].ToString());
+                    p.EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name: "estacivil"].ToString());
+                    p.DataCadastro = Convert.ToDateTime(lista["datacadastro"]);
+                    ListaPessoas.Add(p);
+                };
+                lista.Close();
             }
             catch (NpgsqlException ex)
             {
@@ -122,15 +119,13 @@ namespace CRUDProjetoLuz.DataAccess
                     cmd.Connection.Open();
                 }
                 //Passar comandos sql
-                string _sexo = pessoas.Sexo.ToString();
-                string _estadocivil = pessoas.EstadoCivil.ToString();
                 cmd.CommandText = "Insert Into tbl_cadastro(nome,sobrenome,datanascimento,sexo,estadocivil,datacadastro)" +
                     " values(@nome,@sobrenome,@datanascimento,@sexo,@estadocivil,@datacadastro)";
                 cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
                 cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
                 cmd.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
-                cmd.Parameters.AddWithValue("@sexo", _sexo);
-                cmd.Parameters.AddWithValue("@estadocivil", _estadocivil);
+                cmd.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
+                cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
                 cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
@@ -155,7 +150,10 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //Abra a conexão com o PgSQL                  
-                cmd.Connection.Open();
+                if (cmd.Connection.State == ConnectionState.Closed)
+                {
+                    cmd.Connection.Open();
+                }
                 //Passa comando sql
                 cmd.CommandText = "Update tbl_cadastro Set nome = @nome, sobrenome = @sobrenome, datanascimento = @datanascimento," +
                     " sexo = @sexo, estadocivil = @estadocivil, datacadastro = @datacadastro " +
@@ -189,11 +187,17 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //abre a conexao                
-                cmd.Connection.Open();
+                if (cmd.Connection.State == ConnectionState.Closed)
+                {
+                    cmd.Connection.Open();
+                }
                 //Passa instrução sql
                 cmd.CommandText = "Delete From tbl_cadastro Where nome = @nome";
                 cmd.Parameters.AddWithValue("@nome", nome);
-                cmd.ExecuteNonQuery();
+                if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (NpgsqlException ex)
             {
@@ -205,6 +209,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
+                MessageBox.Show("Deletado com sucesso!");
                 cmd.Connection.Close();
             }
         }
