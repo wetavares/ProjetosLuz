@@ -24,6 +24,7 @@ namespace CRUDProjetoLuz.DataAccess
         public DataRepository(Pessoas pessoas)
         {
             cmd.Connection = conexao.Conectar();
+            Pessoas = pessoas;
         }
         //Definição dos metodos
         //Pega todos os registros
@@ -38,21 +39,24 @@ namespace CRUDProjetoLuz.DataAccess
                 }
                 // Define a instrução SQL
                 cmd.CommandText = "Select * from tbl_cadastro order by id_pessoa;";
+                //cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 NpgsqlDataReader lista = cmd.ExecuteReader();
+                //Pessoas p = new Pessoas();
                 if (lista.HasRows)
                 {
-                    Pessoas p = new Pessoas();
                     while (lista.Read())
                     {
-                        p.Id = Convert.ToInt32(lista["id_pessoa"]);
-                        p.Nome = lista["nome"].ToString();
-                        p.Sobrenome = lista["sobrenome"].ToString();
-                        p.DataNascimento = Convert.ToDateTime(lista["datanascimento"]);
-                        p.Sexo = (Sexo)Enum.Parse(typeof(Sexo), lista[name:"sexo"].ToString());
-                        p.EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name:"estadocivil"].ToString());
-                        p.DataCadastro = Convert.ToDateTime(lista["datacadastro"]);
-                        ListaPessoas.Add(p);
+                        ListaPessoas.Add(new Pessoas()
+                        {
+                            Id = Convert.ToInt32(lista["id_pessoa"]),
+                            Nome = lista["nome"].ToString(),
+                            Sobrenome = lista["sobrenome"].ToString(),
+                            DataNascimento = Convert.ToDateTime(lista["datanascimento"]),
+                            Sexo = (Sexo)Enum.Parse(typeof(Sexo), lista[name: "sexo"].ToString()),
+                            EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name: "estadocivil"].ToString()),
+                            DataCadastro = Convert.ToDateTime(lista["datacadastro"])
+                        });
                     }
                 };
                 lista.Close();
@@ -182,7 +186,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
         }
         //Deleta registros
-        public void DeletarRegistro(string nome)
+        public void DeletarRegistro(int Id)
         {
             try
             {
@@ -192,12 +196,9 @@ namespace CRUDProjetoLuz.DataAccess
                     cmd.Connection.Open();
                 }
                 //Passa instrução sql
-                cmd.CommandText = "Delete From tbl_cadastro Where nome = @nome";
-                cmd.Parameters.AddWithValue("@nome", nome);
-                if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.CommandText = "Delete From tbl_cadastro Where id_pessoas = @Id";
+                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.ExecuteNonQuery();
             }
             catch (NpgsqlException ex)
             {

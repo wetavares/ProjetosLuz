@@ -16,6 +16,7 @@ namespace CRUDProjetoLuz
         private Sexo _sexo;
         private EstadoCivil _estadoCivil;
         private DateTime _dataCadastro;
+
         public int Id 
         {
             get { return _id; }

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using CRUDProjetoLuz.DataAccess;
 
@@ -31,21 +32,32 @@ namespace CRUDProjetoLuz.ViewModel
         public PessoasViewModel()
         {
             Pessoas novapessoa = new Pessoas();
-            DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
-            NovoCommand = new RelayCommand((object parameter) => { Novo(novapessoa); });
-            EditarCommand = new RelayCommand((object parameter) => { Editar(); });
-
             ListaPessoas = new ObservableCollection<Pessoas>();
             DataRepository dadosBD = new DataRepository(novapessoa);
 
+            DeletarCommand = new RelayCommand((object parameter) => { Deletar(dadosBD); });
+            NovoCommand = new RelayCommand((object parameter) => { Novo(novapessoa); });
+            EditarCommand = new RelayCommand((object parameter) => { Editar(); });
+
             dadosBD.PegaTodosRegistros(ListaPessoas);
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
+           
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
         //Implementando o comando Deletar
-        private void Deletar()
+        private void Deletar(DataRepository dadosBD)
         {
+            //novapessoa = PessoasSelecionado;
             ListaPessoas.Remove(PessoasSelecionado);
+            string nome;
+            int id; 
+            id = Convert.ToInt32(ListaPessoas.GetType());
+            nome = PessoasSelecionado.Nome.ToString();
+
+            if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                dadosBD.DeletarRegistro(id);
+            };
             PessoasSelecionado = ListaPessoas.FirstOrDefault();
         }
         //Implementando comando Novo
