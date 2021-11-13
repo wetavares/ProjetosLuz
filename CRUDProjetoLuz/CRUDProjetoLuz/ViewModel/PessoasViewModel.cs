@@ -19,76 +19,99 @@ namespace CRUDProjetoLuz.ViewModel
         public ICommand NovoCommand { get; private set; }
         public ICommand EditarCommand { get; private set; }
 
-        public Pessoas _pessoasSelecionado;
-
-        public Pessoas PessoasSelecionado
-        {
-            get { return _pessoasSelecionado; }
-            set
-            { 
-                SetField(ref _pessoasSelecionado, value);
-            }
-        } 
+        public Pessoas PessoasSelecionado { get; set; }
+        private DataRepository dadosBD;
+        private Pessoas novapessoa;
         public PessoasViewModel()
         {
-            Pessoas novapessoa = new Pessoas();
+            novapessoa = new Pessoas();
             ListaPessoas = new ObservableCollection<Pessoas>();
-            DataRepository dadosBD = new DataRepository(novapessoa);
+            dadosBD = new DataRepository();
 
-            DeletarCommand = new RelayCommand((object parameter) => { Deletar(dadosBD); });
-            NovoCommand = new RelayCommand((object parameter) => { Novo(novapessoa); });
+            DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
+            NovoCommand = new RelayCommand((object parameter) => { Novo(); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
             dadosBD.PegaTodosRegistros(ListaPessoas);
-            PessoasSelecionado = ListaPessoas.FirstOrDefault();
+            //PessoasSelecionado = ListaPessoas.FirstOrDefault();
            
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
         //Implementando o comando Deletar
-        private void Deletar(DataRepository dadosBD)
+        private void Deletar()
         {
             //novapessoa = PessoasSelecionado;
-            ListaPessoas.Remove(PessoasSelecionado);
-            string nome;
-            int id; 
-            id = Convert.ToInt32(ListaPessoas.GetType());
-            nome = PessoasSelecionado.Nome.ToString();
 
-            if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            string nome;
+            int id;
+
+            id = Convert.ToInt32(PessoasSelecionado.Id.ToString());
+            nome = PessoasSelecionado.Nome.ToString();
+            try
             {
-                dadosBD.DeletarRegistro(id);
-            };
-            PessoasSelecionado = ListaPessoas.FirstOrDefault();
+                if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    dadosBD.DeletarRegistro(id);
+                    ListaPessoas.Remove(PessoasSelecionado);
+                };
+                PessoasSelecionado = ListaPessoas.FirstOrDefault();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Erro: ", ex.Message);
+            }
         }
         //Implementando comando Novo
-        private void Novo(Pessoas novapessoa)
+        private void Novo()
         {
             
             int maxId = 0;
-            if (ListaPessoas.Any())
+           /*if (ListaPessoas.Any())
             {
                 maxId = ListaPessoas.Max(f => f.Id);
-            }
-            novapessoa.Id = maxId + 1;
+            }*/
+            novapessoa.Id = maxId;
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
             novoCadastro.DataContext = novapessoa;
-            novoCadastro.ShowDialog();
-            DataRepository cadastrado = new DataRepository(novapessoa);
-            
-
+            novoCadastro.ShowDialog();       
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
-                ListaPessoas.Add(novapessoa);
-                cadastrado.InserirRegistro(novapessoa);
-                PessoasSelecionado = novapessoa;
+                try
+                {
+                    maxId = dadosBD.InserirRegistro(novapessoa);
+                    ListaPessoas.Add(new Pessoas()
+                    {
+                        Id = maxId,
+                        Nome = novapessoa.Nome,
+                        Sobrenome = novapessoa.Sobrenome,
+                        DataNascimento = novapessoa.DataNascimento,
+                        Sexo = novapessoa.Sexo,
+                        EstadoCivil = novapessoa.EstadoCivil,
+                        DataCadastro = novapessoa.DataCadastro
+                    });
+                    //PessoasSelecionado = novapessoa;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Erro: ", ex.Message, MessageBoxButton.OK);
+                }
             }
         }
         //Implementando comando Editar
         public void Editar()
         {
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
-            novoCadastro.DataContext = PessoasSelecionado;//cloneFuncionario;
-            novoCadastro.ShowDialog();
+            novoCadastro.DataContext = PessoasSelecionado;
+            try
+            {
+                dadosBD.AtualizarRegistro(PessoasSelecionado);
+                novoCadastro.ShowDialog();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Erro: ", ex.Message);
+            }
+
         }            
     }
 }

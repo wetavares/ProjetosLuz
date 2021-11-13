@@ -19,19 +19,20 @@ namespace CRUDProjetoLuz.DataAccess
         private static string databaseName = "bdCRUD";   //nome do banco de dados
 
         //Estanciar a conexão                                  
-        private NpgsqlConnection connDB;       
+        private NpgsqlConnection connDB;
+        private string connString;
 
         /*Construtor com definição da string de conexão com BD*/
 
         public Conexao()
         {
             
-            string connString = string.Format( "Server={0};Port={1};User Id={2};Password={3};Database={4};",
-                                            serverName,
-                                            port, 
-                                            userName,
-                                            password, 
-                                            databaseName);
+            connString = string.Format( "Server={0};Port={1};User Id={2};Password={3};Database={4};",
+                                        serverName,
+                                        port, 
+                                        userName,
+                                        password, 
+                                        databaseName);
             connDB = new NpgsqlConnection(connString);
 
         }
