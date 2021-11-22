@@ -20,7 +20,9 @@ namespace CRUDProjetoLuz.ViewModel
         public ICommand EditarCommand { get; private set; }
 
         public Pessoas PessoasSelecionado { get; set; }
-        private DataRepository dadosBD;
+        //private DataRepository dadosBD;
+        private ConexaoSQL dadosBD;
+
         private Pessoas novapessoa;
         public PessoasViewModel()
         {
@@ -41,10 +43,8 @@ namespace CRUDProjetoLuz.ViewModel
         private void Deletar()
         {
             //novapessoa = PessoasSelecionado;
-
             string nome;
             int id;
-
             id = Convert.ToInt32(PessoasSelecionado.Id.ToString());
             nome = PessoasSelecionado.Nome.ToString();
             try
@@ -53,6 +53,7 @@ namespace CRUDProjetoLuz.ViewModel
                 {
                     dadosBD.DeletarRegistro(id);
                     ListaPessoas.Remove(PessoasSelecionado);
+                    MessageBox.Show("Deletado com sucesso!");
                 };
                 PessoasSelecionado = ListaPessoas.FirstOrDefault();
             }
@@ -73,7 +74,7 @@ namespace CRUDProjetoLuz.ViewModel
             novapessoa.Id = maxId;
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
             novoCadastro.DataContext = novapessoa;
-            novoCadastro.ShowDialog();       
+            novoCadastro.ShowDialog();
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 try
@@ -104,14 +105,14 @@ namespace CRUDProjetoLuz.ViewModel
             novoCadastro.DataContext = PessoasSelecionado;
             try
             {
-                dadosBD.AtualizarRegistro(PessoasSelecionado);
                 novoCadastro.ShowDialog();
+                dadosBD.AtualizarRegistro(PessoasSelecionado);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Erro: ", ex.Message);
+                MessageBox.Show("Erro: ",ex.Message);
             }
 
-        }            
+        }
     }
 }

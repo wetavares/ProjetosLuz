@@ -24,11 +24,8 @@ namespace CRUDProjetoLuz
         public NovoCadastroWindow()
         {
             InitializeComponent();
-            SexoComboBox.ItemsSource = Enum.GetValues(typeof(Sexo)).Cast<Sexo>();
-            EstadoCivilComboBox.ItemsSource = Enum.GetValues(typeof(EstadoCivil)).Cast<EstadoCivil>();
-            //DataAccess.Cadastrar
-
-            // MessageBox.Show("Aqui"); //(cad.msgEX);
+            SexoComboBox.ItemsSource = Enum.GetValues<Sexo>();//Enum.GetValues(typeof(Sexo)).Cast<Sexo>();
+            EstadoCivilComboBox.ItemsSource = Enum.GetValues<EstadoCivil>();//Enum.GetValues(typeof(EstadoCivil)).Cast<EstadoCivil>();
         }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
