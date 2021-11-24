@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
+using Npgsql;
 
 namespace CRUDProjetoLuz.Tests
 {
@@ -12,6 +13,7 @@ namespace CRUDProjetoLuz.Tests
             [Test]
             public void TestaSelecionaTodos(ObservableCollection<Pessoas> Listapessoas)
             {
+                NpgsqlDataReader novaLista = new 
                 Assert.IsNotNull(Listapessoas.Count);
             }
         }

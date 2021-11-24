@@ -11,13 +11,10 @@ using System.Collections.ObjectModel;
 
 namespace CRUDProjetoLuz.DataAccess
 {
-    public interface IConexao
+    public interface ICommandSQL
     {
-        //void Conectar();
-        //void Desconectar();
-        void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas);
-        int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas);
         int InserirRegistro(Pessoas pessoas);
+        void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas);
         void AtualizarRegistro(Pessoas pessoas);
         void DeletarRegistro(int Id);
 

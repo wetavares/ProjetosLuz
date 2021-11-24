@@ -21,14 +21,14 @@ namespace CRUDProjetoLuz.ViewModel
 
         public Pessoas PessoasSelecionado { get; set; }
         //private DataRepository dadosBD;
-        private ConexaoNPGSQL dadosBD;
+        private CommandNPGSQL dadosBD;
 
         private readonly Pessoas novaPessoa;
         public PessoasViewModel()
         {
             novaPessoa = new Pessoas();
             ListaPessoas = new ObservableCollection<Pessoas>();
-            dadosBD = new ConexaoNPGSQL();
+            dadosBD = new CommandNPGSQL();
 
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });

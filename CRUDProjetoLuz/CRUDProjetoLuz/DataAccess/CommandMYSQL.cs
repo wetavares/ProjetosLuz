@@ -4,40 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
 using System.Collections.ObjectModel;
+//using MySqlConnector;
 
 namespace CRUDProjetoLuz.DataAccess
-{ 
-    public class ConexaoSQL : IComandSQL
-    { /*Declaração variáveis de conexão com BD */
+{
+    public class CommandMYSQL : ICommandSQL
+    {
+        /*Declaração variáveis de conexão com BD */
         private static string _srvName = "127.0.0.1";   //localhost
         private static string _portID = "5432";              //porta default
         private static string _usrName = "postgres";      //nome do administrador
         private static string _pwd = "root123";     //senha do administrador
         private static string _dtbName = "bdCRUD";   //nome do banco de dados
-        private SqlCommand _comand;
-        private SqlConnection _bdados;
-        private string _connString = $"Server={_srvName};Port={_portID};User Id={_usrName};Password={_pwd};Database={_dtbName};";
-
-
-        public ConexaoSQL()
+        private MySqlCommand _cmd;
+        private MySqlConnection _bd;
+        private string _conString = $"Server={_srvName};Port={_portID};User Id={_usrName};Password={_pwd};Database={_dtbName};";
+        public CommandMYSQL()
         {
-            _bdados = new SqlConnection(_connString);
-            _comand = new SqlCommand();
-            _bdados.Open();
+            _bd = new MySqlConnection(_conString);
+            _cmd = new MySqlCommand();
+            _bd.Open();
         }
         public void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas)
         {
             try
             {
-                if (_comand.Connection.State == ConnectionState.Closed)
+                if (_cmd.Connection.State == ConnectionState.Closed)
                 {
-                    _comand.Connection.Open();
+                    _cmd.Connection.Open();
                 }
-                _comand.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
-                _comand.ExecuteNonQuery();
-                SqlDataReader lista = _comand.ExecuteReader();
+                _cmd.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
+                _cmd.ExecuteNonQuery();
+                MySqlDataReader lista = _cmd.ExecuteReader();
                 if (lista.HasRows)
                 {
                     while (lista.Read())
@@ -56,7 +57,7 @@ namespace CRUDProjetoLuz.DataAccess
                 };
                 lista.Close();
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 throw;
             }
@@ -66,24 +67,24 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                _comand.Connection.Close();
+                _cmd.Connection.Close();
             }
         }
         //Pega um registro pelo codigo
         public int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas)
         {
             //Abra a conexão com o PgSQL
-            if (_comand.Connection.State == ConnectionState.Closed)
+            if (_cmd.Connection.State == ConnectionState.Closed)
             {
-                _comand.Connection.Open();
+                _cmd.Connection.Open();
             }
             try
             {
                 int _id = 0;
                 //Iinstrução SQL, pega o ultimo id dado
-                _comand.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
-                _comand.ExecuteNonQuery();
-                SqlDataReader lista = _comand.ExecuteReader();
+                _cmd.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
+                _cmd.ExecuteNonQuery();
+                MySqlDataReader lista = _cmd.ExecuteReader();
                 if (lista.Read())
                 {
                     Pessoas p = new Pessoas();
@@ -101,7 +102,7 @@ namespace CRUDProjetoLuz.DataAccess
                 return _id;
 
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 throw;
             }
@@ -111,7 +112,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                _comand.Connection.Close();
+                _cmd.Connection.Close();
             }
         }
         //Inserir registros
@@ -121,25 +122,25 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //Abra a conexão com o PgSQL
-                if (_comand.Connection.State == ConnectionState.Closed)
+                if (_cmd.Connection.State == ConnectionState.Closed)
                 {
-                    _comand.Connection.Open();
+                    _cmd.Connection.Open();
                 }
                 //Passar comandos sql
-                _comand.CommandText = "Insert Into tbl_cadastro(nome,sobrenome,datanascimento,sexo,estadocivil,datacadastro)" +
+                _cmd.CommandText = "Insert Into tbl_cadastro(nome,sobrenome,datanascimento,sexo,estadocivil,datacadastro)" +
                     " values(@nome,@sobrenome,@datanascimento,@sexo,@estadocivil,@datacadastro) RETURNING id_pessoa;";
-                _comand.Parameters.AddWithValue("@nome", pessoas.Nome);
-                _comand.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
-                _comand.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
-                _comand.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
-                _comand.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
-                _comand.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
-                _comand.Prepare();
-                _comand.ExecuteNonQuery();
-                SqlDataReader inserido = _comand.ExecuteReader();
+                _cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
+                _cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
+                _cmd.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
+                _cmd.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
+                _cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
+                _cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
+                _cmd.Prepare();
+                _cmd.ExecuteNonQuery();
+                MySqlDataReader inserido = _cmd.ExecuteReader();
                 return idInserido = Convert.ToInt32(inserido["id_pessoa"]);
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 throw;
             }
@@ -149,7 +150,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                _comand.Connection.Close();
+                _cmd.Connection.Close();
             }
         }
         //Atualiza registros
@@ -158,26 +159,26 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //Abra a conexão com o PgSQL                  
-                if (_comand.Connection.State == ConnectionState.Closed)
+                if (_cmd.Connection.State == ConnectionState.Closed)
                 {
-                    _comand.Connection.Open();
+                    _cmd.Connection.Open();
                 }
                 //Passa comando sql
-                _comand.CommandText = "Update tbl_cadastro Set nome = @nome, sobrenome = @sobrenome, datanascimento = @datanascimento," +
+                _cmd.CommandText = "Update tbl_cadastro Set nome = @nome, sobrenome = @sobrenome, datanascimento = @datanascimento," +
                     " sexo = @sexo, estadocivil = @estadocivil, datacadastro = @datacadastro " +
                     "where id_pessoa = @id;";
-                _comand.Parameters.AddWithValue("@nome", pessoas.Nome);
-                _comand.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
-                _comand.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
-                _comand.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
-                _comand.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
-                _comand.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
-                _comand.Parameters.AddWithValue("@id", (int)pessoas.Id);
+                _cmd.Parameters.AddWithValue("@nome", pessoas.Nome);
+                _cmd.Parameters.AddWithValue("@sobrenome", pessoas.Sobrenome);
+                _cmd.Parameters.AddWithValue("@datanascimento", pessoas.DataNascimento);
+                _cmd.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
+                _cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
+                _cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
+                _cmd.Parameters.AddWithValue("@id", (int)pessoas.Id);
                 // cmd.Parameters.AddWithValue("@id", pessoas.Id);
-                _comand.Prepare();
-                _comand.ExecuteNonQuery();
+                _cmd.Prepare();
+                _cmd.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 throw;
             }
@@ -187,7 +188,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                _comand.Connection.Close();
+                _cmd.Connection.Close();
             }
         }
         //Deleta registros
@@ -196,17 +197,17 @@ namespace CRUDProjetoLuz.DataAccess
             try
             {
                 //abre a conexao                
-                if (_comand.Connection.State == ConnectionState.Closed)
+                if (_cmd.Connection.State == ConnectionState.Closed)
                 {
-                    _comand.Connection.Open();
+                    _cmd.Connection.Open();
                 }
                 //Passa instrução sql
-                _comand.CommandText = "Delete From tbl_cadastro Where id_pessoa = @Id;";
-                _comand.Parameters.AddWithValue("@Id", (int)Id);
-                _comand.Prepare();
-                _comand.ExecuteNonQuery();
+                _cmd.CommandText = "Delete From tbl_cadastro Where id_pessoa = @Id;";
+                _cmd.Parameters.AddWithValue("@Id", (int)Id);
+                _cmd.Prepare();
+                _cmd.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 throw;
             }
@@ -216,7 +217,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
             finally
             {
-                _comand.Connection.Close();
+                _cmd.Connection.Close();
             }
         }
     }
