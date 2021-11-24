@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUDProjetoLuz", "CRUDProjetoLuz\CRUDProjetoLuz.csproj", "{590E65E5-F4DC-4484-A153-D44458071AF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRUDProjetoLuz", "CRUDProjetoLuz\CRUDProjetoLuz.csproj", "{590E65E5-F4DC-4484-A153-D44458071AF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUDProjetoLuz.Tests", "CRUDProjetoLuz.Tests\CRUDProjetoLuz.Tests.csproj", "{EE5E1E54-1C89-466C-8BF1-A34A86B0CDBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{590E65E5-F4DC-4484-A153-D44458071AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590E65E5-F4DC-4484-A153-D44458071AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590E65E5-F4DC-4484-A153-D44458071AF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5E1E54-1C89-466C-8BF1-A34A86B0CDBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5E1E54-1C89-466C-8BF1-A34A86B0CDBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5E1E54-1C89-466C-8BF1-A34A86B0CDBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE5E1E54-1C89-466C-8BF1-A34A86B0CDBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
+using System.Collections.ObjectModel;
 //using MySqlConnector;
 
 namespace CRUDProjetoLuz.DataAccess
 {
-    public class ConexaoMYSQL : IConexao
+    public class ConexaoMYSQL : IComandSQL
     {
         /*Declaração variáveis de conexão com BD */
         private static string _srvName = "127.0.0.1";   //localhost
@@ -27,7 +28,7 @@ namespace CRUDProjetoLuz.DataAccess
             _cmd = new MySqlCommand();
             _bd.Open();
         }
-        public void SelecionaTodos(List<Pessoas> ListaPessoas)
+        public void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
         }
         //Pega um registro pelo codigo
-        public int SelecionaRegistroID(List<Pessoas> ListaPessoas)
+        public int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas)
         {
             //Abra a conexão com o PgSQL
             if (_cmd.Connection.State == ConnectionState.Closed)

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.ObjectModel;
 
 namespace CRUDProjetoLuz.DataAccess
 { 
-    public class ConexaoSQL : IConexao
+    public class ConexaoSQL : IComandSQL
     { /*Declaração variáveis de conexão com BD */
         private static string _srvName = "127.0.0.1";   //localhost
         private static string _portID = "5432";              //porta default
@@ -26,7 +27,7 @@ namespace CRUDProjetoLuz.DataAccess
             _comand = new SqlCommand();
             _bdados.Open();
         }
-        public void SelecionaTodos(List<Pessoas> ListaPessoas)
+        public void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
         }
         //Pega um registro pelo codigo
-        public int SelecionaRegistroID(List<Pessoas> ListaPessoas)
+        public int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas)
         {
             //Abra a conexão com o PgSQL
             if (_comand.Connection.State == ConnectionState.Closed)

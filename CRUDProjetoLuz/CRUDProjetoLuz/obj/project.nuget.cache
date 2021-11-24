@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RQKexakOE27Yo2bgEVwo6NBbDXf1NcG4vbrJQxTslOELEIVyiDaVxwz7IJ0LuSoEUHC4NquN4NW7oOLBfeDvkA==",
+  "dgSpecHash": "IK40ekz1OQYvcz1jsufodBNwA8jCDN6zyWQDenP9A5fTNBKZ/Ss7NfOtt2KH7Y2snQn6Iyxfxk7/1hhFQDhtsg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Public\\Documents\\ProjetosLUZ\\ProjetosLuz\\CRUDProjetoLuz\\CRUDProjetoLuz\\CRUDProjetoLuz.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,14 @@
     "C:\\Users\\wetav\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\npgsql\\5.0.10\\npgsql.5.0.10.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\nunit\\3.13.2\\nunit.3.13.2.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.console\\3.12.0\\nunit.console.3.12.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\nunit.consolerunner\\3.12.0\\nunit.consolerunner.3.12.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.extension.nunitprojectloader\\3.6.0\\nunit.extension.nunitprojectloader.3.6.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.extension.nunitv2driver\\3.8.0\\nunit.extension.nunitv2driver.3.8.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.extension.nunitv2resultwriter\\3.6.0\\nunit.extension.nunitv2resultwriter.3.6.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.extension.teamcityeventlistener\\1.0.7\\nunit.extension.teamcityeventlistener.1.0.7.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunit.extension.vsprojectloader\\3.9.0\\nunit.extension.vsprojectloader.3.9.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\nunittestadapter\\2.3.0\\nunittestadapter.2.3.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",

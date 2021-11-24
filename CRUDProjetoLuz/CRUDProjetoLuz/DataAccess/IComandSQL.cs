@@ -15,8 +15,8 @@ namespace CRUDProjetoLuz.DataAccess
     {
         //void Conectar();
         //void Desconectar();
-        void SelecionaTodos(List<Pessoas> ListaPessoas);
-        int SelecionaRegistroID(List<Pessoas> ListaPessoas);
+        void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas);
+        int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas);
         int InserirRegistro(Pessoas pessoas);
         void AtualizarRegistro(Pessoas pessoas);
         void DeletarRegistro(int Id);

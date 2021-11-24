@@ -21,22 +21,20 @@ namespace CRUDProjetoLuz.ViewModel
 
         public Pessoas PessoasSelecionado { get; set; }
         //private DataRepository dadosBD;
-        private ConexaoSQL dadosBD;
+        private ConexaoNPGSQL dadosBD;
 
-        private Pessoas novapessoa;
+        private readonly Pessoas novaPessoa;
         public PessoasViewModel()
         {
-            novapessoa = new Pessoas();
+            novaPessoa = new Pessoas();
             ListaPessoas = new ObservableCollection<Pessoas>();
-            dadosBD = new DataRepository();
+            dadosBD = new ConexaoNPGSQL();
 
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
-            dadosBD.PegaTodosRegistros(ListaPessoas);
-            //PessoasSelecionado = ListaPessoas.FirstOrDefault();
-           
+            dadosBD.SelecionaTodos(ListaPessoas);
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
         //Implementando o comando Deletar
@@ -49,7 +47,7 @@ namespace CRUDProjetoLuz.ViewModel
             nome = PessoasSelecionado.Nome.ToString();
             try
             {
-                if (MessageBox.Show("Deseja realmente DELETAR " + nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Deseja realmente DELETAR o Id: " +id+ " - "+ nome + " do cadastro?", "Deletar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     dadosBD.DeletarRegistro(id);
                     ListaPessoas.Remove(PessoasSelecionado);
@@ -59,42 +57,37 @@ namespace CRUDProjetoLuz.ViewModel
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Erro: ", ex.Message);
+                MessageBox.Show("Erro: Ao Deletar", ex.Message);
             }
         }
         //Implementando comando Novo
         private void Novo()
         {
-            
             int maxId = 0;
-           /*if (ListaPessoas.Any())
-            {
-                maxId = ListaPessoas.Max(f => f.Id);
-            }*/
-            novapessoa.Id = maxId;
+            novaPessoa.Id = maxId;
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
-            novoCadastro.DataContext = novapessoa;
+            novoCadastro.DataContext = novaPessoa;
             novoCadastro.ShowDialog();
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 try
                 {
-                    maxId = dadosBD.InserirRegistro(novapessoa);
+                    maxId = dadosBD.InserirRegistro(novaPessoa);
                     ListaPessoas.Add(new Pessoas()
                     {
                         Id = maxId,
-                        Nome = novapessoa.Nome,
-                        Sobrenome = novapessoa.Sobrenome,
-                        DataNascimento = novapessoa.DataNascimento,
-                        Sexo = novapessoa.Sexo,
-                        EstadoCivil = novapessoa.EstadoCivil,
-                        DataCadastro = novapessoa.DataCadastro
+                        Nome = novaPessoa.Nome,
+                        Sobrenome = novaPessoa.Sobrenome,
+                        DataNascimento = novaPessoa.DataNascimento,
+                        Sexo = novaPessoa.Sexo,
+                        EstadoCivil = novaPessoa.EstadoCivil,
+                        DataCadastro = novaPessoa.DataCadastro
                     });
                     //PessoasSelecionado = novapessoa;
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show("Erro: ", ex.Message, MessageBoxButton.OK);
+                    MessageBox.Show("Erro: Ao inserir. ", ex.Message, MessageBoxButton.OK);
                 }
             }
         }

@@ -24,9 +24,9 @@ namespace CRUDProjetoLuz.DataAccess
         {
             _bd = new NpgsqlConnection(_conString);
             _cmd = new NpgsqlCommand();
-            _bd.Open();
+            _cmd.Connection = _bd;
         }
-        public void SelecionaTodos(List<Pessoas> ListaPessoas)
+        public void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas)
         {
             try
             {
@@ -51,6 +51,7 @@ namespace CRUDProjetoLuz.DataAccess
                             EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name: "estadocivil"].ToString()),
                             DataCadastro = Convert.ToDateTime(lista["datacadastro"])
                         });
+                        ListaPessoas.Add(null);
                     }
                 };
                 lista.Close();
@@ -69,7 +70,7 @@ namespace CRUDProjetoLuz.DataAccess
             }
         }
         //Pega um registro pelo codigo
-        public int SelecionaRegistroID(List<Pessoas> ListaPessoas)
+        public int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas)
         {
             //Abra a conexão com o PgSQL
             if (_cmd.Connection.State == ConnectionState.Closed)
@@ -98,7 +99,6 @@ namespace CRUDProjetoLuz.DataAccess
                 };
                 lista.Close();
                 return _id;
-
             }
             catch (NpgsqlException ex)
             {
@@ -133,7 +133,7 @@ namespace CRUDProjetoLuz.DataAccess
                 _cmd.Parameters.AddWithValue("@sexo", pessoas.Sexo.ToString());
                 _cmd.Parameters.AddWithValue("@estadocivil", pessoas.EstadoCivil.ToString());
                 _cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
-                _cmd.Prepare();
+                //_cmd.Prepare();
                 _cmd.ExecuteNonQuery();
                 NpgsqlDataReader inserido = _cmd.ExecuteReader();
                 return idInserido = Convert.ToInt32(inserido["id_pessoa"]);
@@ -173,7 +173,7 @@ namespace CRUDProjetoLuz.DataAccess
                 _cmd.Parameters.AddWithValue("@datacadastro", pessoas.DataCadastro);
                 _cmd.Parameters.AddWithValue("@id", (int)pessoas.Id);
                 // cmd.Parameters.AddWithValue("@id", pessoas.Id);
-                _cmd.Prepare();
+               // _cmd.Prepare();
                 _cmd.ExecuteNonQuery();
             }
             catch (NpgsqlException ex)
@@ -202,7 +202,7 @@ namespace CRUDProjetoLuz.DataAccess
                 //Passa instrução sql
                 _cmd.CommandText = "Delete From tbl_cadastro Where id_pessoa = @Id;";
                 _cmd.Parameters.AddWithValue("@Id", (int)Id);
-                _cmd.Prepare();
+              //  _cmd.Prepare();
                 _cmd.ExecuteNonQuery();
             }
             catch (NpgsqlException ex)

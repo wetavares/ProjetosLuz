@@ -62,7 +62,7 @@ namespace CRUDProjetoLuz.CRUDProjetoLuz.ViewModel.CRUDProjetoLuz.ViewModel {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "5.0.12.0")]
         public static void Main() {
-            CRUDProjetoLuz.CRUDProjetoLuz.ViewModel.CRUDProjetoLuz.ViewModel.App app = new CRUDProjetoLuz.CRUDProjetoLuz.ViewModel.CRUDProjetoLuz.ViewModel.App();
+            CRUDProjetoLuz.ViewModel.App app = new CRUDProjetoLuz.ViewModel.App();
             app.InitializeComponent();
             app.Run();
         }

@@ -18,7 +18,7 @@ namespace CRUDProjetoLuz.DataAccess
 
         // public DataRepository() { }
         //Estanciar class de conexão e comandos 
-        private IConexao conexao;
+        private IComandSQL conexao;
         private NpgsqlCommand cmd;
         public DataRepository()
         {
