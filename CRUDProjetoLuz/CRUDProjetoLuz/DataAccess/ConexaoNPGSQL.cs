@@ -11,7 +11,7 @@ using Npgsql;
 namespace CRUDProjetoLuz.DataAccess
 {
     class ConexaoNPGSQL : IConexaoDB
-    { 
+    {
         /*Declaração variáveis de conexão com BD */
         private static string _srvName = "127.0.0.1";   //localhost
         private static string _portID = "5432";              //porta default
@@ -22,13 +22,13 @@ namespace CRUDProjetoLuz.DataAccess
         private SqlConnection _bdados;
         private string _connString = $"Server={_srvName};Port={_portID};User Id={_usrName};Password={_pwd};Database={_dtbName};";
 
-    public ConexaoNPGSQL()
+        public ConexaoNPGSQL()
         {
             _bdados = new SqlConnection(_connString);
             _command = new SqlCommand();
         }
-    public void Open()
-    {
+        public void Open()
+        {
             try
             {
                 if (_command.Connection.State == ConnectionState.Closed)
@@ -40,7 +40,7 @@ namespace CRUDProjetoLuz.DataAccess
             {
                 throw;
             }
-    }
+        }
         public void Closed()
         {
             try
@@ -55,4 +55,5 @@ namespace CRUDProjetoLuz.DataAccess
                 throw;
             }
         }
+    }
 }

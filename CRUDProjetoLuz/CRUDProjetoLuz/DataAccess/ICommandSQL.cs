@@ -14,7 +14,8 @@ namespace CRUDProjetoLuz.DataAccess
     public interface ICommandSQL
     {
         int InserirRegistro(Pessoas pessoas);
-        List<Pessoas> SelecionaTodos();
+        ObservableCollection<Pessoas> SelecionarTodos();//ObservableCollection<Pessoas>
+
         void AtualizarRegistro(Pessoas pessoas);
         void DeletarRegistro(int Id);
 

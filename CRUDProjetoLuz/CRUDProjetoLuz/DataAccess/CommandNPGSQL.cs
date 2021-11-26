@@ -15,37 +15,39 @@ namespace CRUDProjetoLuz.DataAccess
         private IConexaoDB conexao;
         private NpgsqlCommand _cmd;
 
-        public CommandNPGSQL()
+    public CommandNPGSQL()
         {
             conexao = new ConexaoNPGSQL();
             conexao.Open();
             _cmd = new NpgsqlCommand();
         }
-        public List<Pessoas> SelecionaTodos()
+
+    public ObservableCollection<Pessoas> SelecionarTodos()
         {
-            List<Pessoas> pessoas = new List<Pessoas>();
-            _cmd.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
-            _cmd.ExecuteNonQuery();
-            NpgsqlDataReader lista = _cmd.ExecuteReader();
-            if (lista.HasRows) 
-            {
-                //Ler a lista com os dados da select e adiciona na lista destino
-                while (lista.Read())
-                {
-                    Pessoas p = new Pessoas()
-                    p.Id = Convert.ToInt32(lista["id_pessoa"]);
-                    p.Nome = lista["nome"].ToString();
-                    p.Sobrenome = lista["sobrenome"].ToString(),
-                    p.DataNascimento = Convert.ToDateTime(lista["datanascimento"]);
-                    p.Sexo = Enum.Parse<Sexo>(lista[name: "sexo"].ToString());
-                    p.EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name: "estadocivil"].ToString());
-                    p.DataCadastro = Convert.ToDateTime(lista["datacadastro"]);
-                    pessoas.Add(p);
-                }
-                lista.Close();
-                conexao.Closed();
-                return pessoas;
-            }
+            ObservableCollection<Pessoas> pessoas = new ObservableCollection<Pessoas>();
+                    _cmd.CommandText = $"Select * from tbl_cadastro order by id_pessoa;";
+                    _cmd.ExecuteNonQuery();
+                    NpgsqlDataReader lista = _cmd.ExecuteReader();
+                        if (lista.HasRows)
+                        {
+                            //Ler a lista com os dados da select e adiciona na lista destino
+                            while (lista.Read())
+                            {
+                                pessoas.Add(new Pessoas()
+                                {
+                                    Id = Convert.ToInt32(lista["id_pessoa"]),
+                                    Nome = lista["nome"].ToString(),
+                                    Sobrenome = lista["sobrenome"].ToString(),
+                                    DataNascimento = Convert.ToDateTime(lista["datanascimento"]),
+                                    Sexo = Enum.Parse<Sexo>(lista[name: "sexo"].ToString()),
+                                    EstadoCivil = (EstadoCivil)Enum.Parse(typeof(EstadoCivil), lista[name: "estadocivil"].ToString()),
+                                    DataCadastro = Convert.ToDateTime(lista["datacadastro"])
+                                });
+                            }
+                            lista.Close();
+                            conexao.Closed();
+                        }
+            return pessoas;
         }
         //Inserir registros
         public int InserirRegistro(Pessoas pessoas)

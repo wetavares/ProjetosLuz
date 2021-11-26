@@ -28,8 +28,9 @@ namespace CRUDProjetoLuz.DataAccess
             _cmd = new MySqlCommand();
             _bd.Open();
         }
-        public void SelecionaTodos(ObservableCollection<Pessoas> ListaPessoas)
+        public ObservableCollection<Pessoas> SelecionarTodos()
         {
+            ObservableCollection<Pessoas> ListaPessoas = new ObservableCollection<Pessoas>();
             try
             {
                 if (_cmd.Connection.State == ConnectionState.Closed)
@@ -69,6 +70,7 @@ namespace CRUDProjetoLuz.DataAccess
             {
                 _cmd.Connection.Close();
             }
+            return ListaPessoas;
         }
         //Pega um registro pelo codigo
         public int SelecionaRegistroID(ObservableCollection<Pessoas> ListaPessoas)

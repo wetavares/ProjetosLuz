@@ -34,7 +34,7 @@ namespace CRUDProjetoLuz.ViewModel
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
-            dadosBD.SelecionaTodos(ListaPessoas);
+            ListaPessoas =  dadosBD.SelecionarTodos();//dadosBD.SelecionarTodos(ListaPessoas);
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
         //Implementando o comando Deletar
