@@ -11,38 +11,19 @@ namespace CRUDProjetoLuz.Tests
     {
         [TestFixture]
              
-        public class TesteConexaoNPGSQL: ICommandSQL
+        public class TesteConexaoNPGSQL
         {
             CommandNPGSQL cmd = new CommandNPGSQL();
-            
+
             [Test]
 
-            public void TestaSeEstaSelecionandoTodos()
+            public void TestaSeEstaSelecionandoTodosRegistrosDoBanco()
             {
-                ObservableCollection<Pessoas> pessoas = new ObservableCollection<Pessoas>();
+                List<Pessoas> pessoas = new List<Pessoas>();
                 pessoas = cmd.SelecionarTodos();
 
-                Assert.IsNotNull(pessoas.Count);
-            }
-            [Test]
-            public void AtualizarRegistro(Pessoas pessoas)
-            {
-                throw new NotImplementedException();
-            }
-            [Test]
-            public void DeletarRegistro(int Id)
-            {
-                throw new NotImplementedException();
-            }
-            [Test]
-            public int InserirRegistro(Pessoas pessoas)
-            {
-                throw new NotImplementedException();
-            }
-            [Test]
-            public ObservableCollection<Pessoas> SelecionarTodos()
-            {
-                throw new NotImplementedException();
+                Assert.IsEmpty(pessoas);
+                Assert.IsEmpty(pessoas);
             }
         }
     }

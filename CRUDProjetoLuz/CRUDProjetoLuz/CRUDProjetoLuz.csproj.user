@@ -7,15 +7,15 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="NovoCadastroWindow.xaml.cs">
+    <Compile Update="View\NovoCadastroWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MainWindow.xaml">
+    <Page Update="ViewModel\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="NovoCadastroWindow.xaml">
+    <Page Update="View\NovoCadastroWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

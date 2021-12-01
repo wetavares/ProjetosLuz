@@ -125,7 +125,7 @@
           "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
         }
       },
-      "Microsoft.NETCore.Platforms/3.1.0": {
+      "Microsoft.NETCore.Platforms/5.0.0": {
         "type": "package",
         "compile": {
           "lib/netstandard1.0/_._": {}
@@ -1654,17 +1654,18 @@
         "microsoft.net.test.sdk.nuspec"
       ]
     },
-    "Microsoft.NETCore.Platforms/3.1.0": {
-      "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+    "Microsoft.NETCore.Platforms/5.0.0": {
+      "sha512": "VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
       "type": "package",
-      "path": "microsoft.netcore.platforms/3.1.0",
+      "path": "microsoft.netcore.platforms/5.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard1.0/_._",
-        "microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+        "microsoft.netcore.platforms.5.0.0.nupkg.sha512",
         "microsoft.netcore.platforms.nuspec",
         "runtime.json",
         "useSharedDesignerContext.txt",
@@ -5349,6 +5350,7 @@
     "net5.0-windows7.0": [
       "CRUDProjetoLuz >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.0.0",
+      "Microsoft.NETCore.Platforms >= 5.0.0",
       "NUnit >= 3.13.2",
       "NUnitTestAdapter >= 2.3.0"
     ]
@@ -5404,6 +5406,10 @@
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
             "version": "[17.0.0, )"
+          },
+          "Microsoft.NETCore.Platforms": {
+            "target": "Package",
+            "version": "[5.0.0, )"
           },
           "NUnit": {
             "target": "Package",

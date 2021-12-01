@@ -28,9 +28,9 @@ namespace CRUDProjetoLuz.DataAccess
             _cmd = new MySqlCommand();
             _bd.Open();
         }
-        public ObservableCollection<Pessoas> SelecionarTodos()
+        public List<Pessoas> SelecionarTodos()
         {
-            ObservableCollection<Pessoas> ListaPessoas = new ObservableCollection<Pessoas>();
+            List<Pessoas> ListaPessoas = new List<Pessoas>();
             try
             {
                 if (_cmd.Connection.State == ConnectionState.Closed)

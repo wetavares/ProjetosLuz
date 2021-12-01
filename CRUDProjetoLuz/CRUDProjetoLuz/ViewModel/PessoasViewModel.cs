@@ -27,14 +27,13 @@ namespace CRUDProjetoLuz.ViewModel
         public PessoasViewModel()
         {
             novaPessoa = new Pessoas();
-            ListaPessoas = new ObservableCollection<Pessoas>();
             dadosBD = new CommandNPGSQL();
+            ListaPessoas = new ObservableCollection<Pessoas>(dadosBD.SelecionarTodos());
 
             DeletarCommand = new RelayCommand((object parameter) => { Deletar(); });
             NovoCommand = new RelayCommand((object parameter) => { Novo(); });
             EditarCommand = new RelayCommand((object parameter) => { Editar(); });
 
-            ListaPessoas =  dadosBD.SelecionarTodos();//dadosBD.SelecionarTodos(ListaPessoas);
         }
         //Comandos - Delete / Novo / Editar - utilizando o RelayCammand
         //Implementando o comando Deletar
@@ -66,8 +65,6 @@ namespace CRUDProjetoLuz.ViewModel
             int maxId = 0;
             novaPessoa.Id = maxId;
             NovoCadastroWindow novoCadastro = new NovoCadastroWindow();
-            novoCadastro.DataContext = novaPessoa;
-            novoCadastro.ShowDialog();
             if (novoCadastro.DialogResult.HasValue && novoCadastro.DialogResult.Value)
             {
                 try

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bjZD93vm7A0ugIr8/C7NDV1sRxMkVSak3ZRBjJ1Xo9sAneUNmvMpXd0onhFMi5i3W/36cyGzqDdF0TrqZpZ42A==",
+  "dgSpecHash": "fV0WK9/APoHAfHeBrkEt8cFqcMSRi4bzn+emIa5xSjMu6085EErCDCKBZNTAR9kYDcuoP0CLkG5sPPUaQTXz9g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Public\\Documents\\ProjetosLUZ\\ProjetosLuz\\CRUDProjetoLuz\\CRUDProjetoLuz.Tests\\CRUDProjetoLuz.Tests.csproj",
   "expectedPackageFiles": [
@@ -13,7 +13,7 @@
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.codecoverage\\17.0.0\\microsoft.codecoverage.17.0.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.net.test.sdk\\17.0.0\\microsoft.net.test.sdk.17.0.0.nupkg.sha512",
-    "C:\\Users\\wetav\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\wetav\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.netcore.targets\\1.0.1\\microsoft.netcore.targets.1.0.1.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.0.0\\microsoft.testplatform.objectmodel.17.0.0.nupkg.sha512",
     "C:\\Users\\wetav\\.nuget\\packages\\microsoft.testplatform.testhost\\17.0.0\\microsoft.testplatform.testhost.17.0.0.nupkg.sha512",
